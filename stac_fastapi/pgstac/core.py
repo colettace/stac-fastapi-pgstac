@@ -51,11 +51,12 @@ class CoreCrudClient(AsyncBaseCoreClient):
         if collections is not None and len(collections) > 0:
             for c in collections:
                 coll = Collection(**c)
-                coll["links"] = await CollectionLinks(
-                    collection_id=coll["id"], request=request
-                ).get_links(extra_links=coll.get("links"))
+                if 'id' in coll:
+                    coll["links"] = await CollectionLinks(
+                        collection_id=coll["id"], request=request
+                    ).get_links(extra_links=coll.get("links"))
 
-                linked_collections.append(coll)
+                    linked_collections.append(coll)
 
         links = [
             {
